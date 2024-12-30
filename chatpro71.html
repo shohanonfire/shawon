@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Submission</title>
+    <link rel="stylesheet" href="chatstyles.css">
+    <style>
+        /* Full-screen chat box */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 80vh;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .chat-header {
+            display: flex;
+            align-items: center;
+            background-color: #38ACEC;
+            padding: 10px;
+            border-bottom: 1px solid #000;
+        }
+        .profile-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+            position: relative;
+        }
+        .profile-photo::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 10px;
+            height: 10px;
+            background-color: green;
+            border: 2px solid #fff;
+            border-radius: 50%;
+        }
+        .chat-info h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .chat-info p {
+            margin: 0;
+            color: black;
+            font-size: 14px;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            background-color: #fff;
+        }
+        #chatInput {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #sendBtn {
+            margin-left: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #sendBtn:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin: 10px 0;
+        }
+        .message.sent .text {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            align-self: flex-end;
+        }
+        .message.received .text {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 10px;
+            align-self: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Header with Bot Name and Profile Picture -->
+        <div class="chat-header">
+            <div style="position: relative;">
+                <img src="https://imgur.com/Yq4lXTk.png" alt="Bot Profile" class="profile-photo">
+            </div>
+            <div class="chat-info">
+                <h3>ABS Support</h3> <!-- Replace with your bot's name -->
+                <p>Online</p>
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages"></div>
+
+        <!-- Chat Input -->
+        <div class="chat-input" id="chatInputSection">
+            <input type="text" id="chatInput" placeholder="আপনার নাম লিখুন" autocomplete="off">
+            <button id="sendBtn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        let step = 1; // To track the input sequence
+        let userName = '';
+        let userEmail = '';
+        let userComplaint = '';
+
+        sendBtn.addEventListener('click', () => {
+            const input = chatInput.value.trim();
+
+            if (!input) return; // Ignore empty inputs
+
+            // Append the user's input to the chat
+            appendMessage('sent', input);
+
+            if (step === 1) {
+                userName = input;
+                appendMessage('received', 'আপনার ইমেইল লিখুন (এর মাধ্যমে আমাদের সাপোর্ট টিম আপনাকে রিপ্লাই করবে)');
+                chatInput.placeholder = 'আপনার ইমেইল লিখুন';
+                step++;
+            } else if (step === 2) {
+                if (!validateEmail(input)) {
+                    appendMessage('received', 'অনুগ্রহ করে একটি সঠিক ইমেইল লিখুন।');
+                    return;
+                }
+                userEmail = input;
+                appendMessage('received', 'আপনার অভিযোগ থাকলে তা লিখতে পারেন');
+                chatInput.placeholder = 'আপনার অভিযোগ লিখুন';
+                step++;
+            } else if (step === 3) {
+                userComplaint = input;
+
+                // Here, you can send the data to your server or Telegram bot
+                sendToTelegramBot(userName, userEmail, userComplaint);
+
+                appendMessage('received', 'ধন্যবাদ! আপনার অভিযোগ গ্রহণ করা হয়েছে। ৪-৫ ঘন্টার মধ্যে আপনার সমস্যার সমাধান দেয়া হবে');
+                chatInputSection.style.display = 'none'; // Close the chat input
+            }
+
+            chatInput.value = ''; // Clear input field
+        });
+
+        function appendMessage(type, text) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', type);
+
+            const textElement = document.createElement('div');
+            textElement.classList.add('text');
+            textElement.textContent = text;
+
+            messageElement.appendChild(textElement);
+            chatMessages.appendChild(messageElement);
+
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
+        }
+
+        // Email validation function
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function sendToTelegramBot(name, email, complaint) {
+            const botToken = '7933668099:AAFy-rkGC6FN8Gf8FCd_ZDpLIa-4GRJXAPY';
+            const chatId = '7174617845';
+
+            const message = `নাম: ${name}\nইমেইল: ${email}\nঅভিযোগ: ${complaint}`;
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.ok) {
+                    appendMessage('received', 'অভিযোগ পাঠাতে সমস্যা হয়েছে।');
+                }
+            })
+            .catch(error => {
+                appendMessage('received', 'সার্ভারে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।');
+            });
+        }
+    </script>
+</body>
+</html>

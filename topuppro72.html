@@ -1,0 +1,625 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recharge Selection Page</title>
+    <style>
+        /* Existing styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            background-color: #fff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            width: 100px;
+            height: auto;
+        }
+
+        .account {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .account:hover {
+            background-color: #45a049;
+        }
+
+        .banner-container {
+            width: 80%;
+            max-width: 100%;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .banner img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .container {
+            width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px 15px;
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .title-box {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 5px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .circle {
+            width: 18px;
+            height: 18px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .recharge-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .recharge-button {
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .recharge-button:active {
+            transform: scale(0.95);
+        }
+
+        .recharge-button.selected {
+            background-color: #28a745;
+            transform: scale(1.05);
+        }
+
+        .promo-container {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .promo-code-input {
+            padding: 5px;
+            width: 100%;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .button {
+            position: relative;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+            padding-block: 0.5rem;
+            padding-inline: 1.25rem;
+            background-color: rgb(0 107 179);
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #ffff;
+            gap: 10px;
+            font-weight: bold;
+            border: 3px solid #ffffff4d;
+            outline: none;
+            overflow: hidden;
+            font-size: 15px;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .total-amount {
+            font-weight: bold;
+            color: #fff;
+            font-size: 18px;
+            padding: 5px;
+            background-color: #4CAF50;
+            border-radius: 10px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .total-amount.updated {
+            background-color: #007bff;
+            transform: scale(1.05);
+        }
+
+        .payment-method-container {
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px 15px;
+            background-color: #f9f9f9;
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-image {
+            position: relative;
+            margin-bottom: 10px;
+            display: inline-block;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            padding: 5px;
+            background-color: #fff;
+        }
+
+        .payment-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .tick-icon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .btn-donate {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-donate:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://i.postimg.cc/gj4gCfwC/462554798-1100932414870817-7219247599607386398-n.jpg" alt="Logo">
+        </div>
+        <div class="account">My Account</div>
+    </header>
+
+    <div class="banner-container">
+        <div class="banner">
+            <img src="https://i.postimg.cc/fy9by5R2/462567737-2000676980437837-1184635899158123734-n-enhanced.png" alt="Banner">
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <div class="title-box">
+                <div class="circle">1</div>
+                Account Info
+                        </div>
+            <div class="wave-group">
+                <input required type="text" class="input" style="width: 100%; padding: 5px;">
+                <span class="bar"></span>
+                <label class="label">
+                    <span class="label-char" style="--index: 0">P</span>
+                    <span class="label-char" style="--index: 1">l</span>
+                    <span class="label-char" style="--index: 2">a</span>
+                    <span class="label-char" style="--index: 3">y</span>
+                    <span class="label-char" style="--index: 4">e</span>
+                    <span class="label-char" style="--index: 5">r</span>
+                    <span class="label-char" style="--index: 6">&nbsp;</span>
+                    <span class="label-char" style="--index: 7">I</span>
+                    <span class="label-char" style="--index: 8">D</span>
+                    <span class="label-char" style="--index: 9">&nbsp;</span>
+                    <span class="label-char" style="--index: 10">(</span>
+                    <span class="label-char" style="--index: 11">U</span>
+                    <span class="label-char" style="--index: 12">I</span>
+                    <span class="label-char" style="--index: 13">D</span>
+                    <span class="label-char" style="--index: 14">)</span>
+                    <style>
+/* From Uiverse.io by AbanoubMagdy1 */ 
+.wave-group {
+  position: relative;
+}
+
+.wave-group .input {
+  font-size: 16px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 200px;
+  border: none;
+  border-bottom: 1px solid #515151;
+  background: transparent;
+}
+
+.wave-group .input:focus {
+  outline: none;
+}
+
+.wave-group .label {
+  color: #999;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  display: flex;
+}
+
+.wave-group .label-char {
+  transition: 0.2s ease all;
+  transition-delay: calc(var(--index) * .05s);
+}
+
+.wave-group .input:focus ~ label .label-char,
+.wave-group .input:valid ~ label .label-char {
+  transform: translateY(-20px);
+  font-size: 14px;
+  color: #5264AE;
+}
+
+.wave-group .bar {
+  position: relative;
+  display: block;
+  width: 200px;
+}
+
+.wave-group .bar:before,.wave-group .bar:after {
+  content: '';
+  height: 2px;
+  width: 0;
+  bottom: 1px;
+  position: absolute;
+  background: #5264AE;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+
+.wave-group .bar:before {
+  left: 50%;
+}
+
+.wave-group .bar:after {
+  right: 50%;
+}
+
+.wave-group .input:focus ~ .bar:before,
+.wave-group .input:focus ~ .bar:after {
+  width: 50%;
+}
+/* From Uiverse.io by mrhyddenn */ 
+button {
+  position: relative;
+  padding: 10px 20px;
+  border-radius: 7px;
+  border: 1px Solid Blue;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 2px;
+  background: black;
+  color: #FFF;
+  overflow: hidden;
+  box-shadow: 0 0 0 0 transparent;
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+}
+
+
+button:hover {
+  background: rgb(61, 106, 255);
+  box-shadow: 0 0 30px 5px rgba(0, 142, 236, 0.815);
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+
+button:hover::before {
+  -webkit-animation: sh02 0.5s 0s linear;
+  -moz-animation: sh02 0.5s 0s linear;
+  animation: sh02 0.5s 0s linear;
+}
+
+button::before {
+  content: '';
+  display: block;
+  width: 0px;
+  height: 86%;
+  position: absolute;
+  top: 7%;
+  left: 0%;
+  opacity: 0;
+  background: #fff;
+  box-shadow: 0 0 50px 30px #fff;
+  -webkit-transform: skewX(-20deg);
+  -moz-transform: skewX(-20deg);
+  -ms-transform: skewX(-20deg);
+  -o-transform: skewX(-20deg);
+  transform: skewX(-20deg);
+}
+
+@keyframes sh02 {
+  from {
+    opacity: 0;
+    left: 0%;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    left: 100%;
+  }
+}
+
+button:active {
+  box-shadow: 0 0 0 0 transparent;
+  -webkit-transition: box-shadow 0.2s ease-in;
+  -moz-transition: box-shadow 0.2s ease-in;
+  transition: box-shadow 0.2s ease-in;
+}
+                  </style>
+                </label>
+            </div>
+        </div>
+
+<style>
+    /* Style for the box */
+    .recharge-box {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        width: 160px; /* Width of the entire box */
+        margin: 0 auto;
+    }
+    
+    /* Title style (similar to other box titles) */
+    .recharge-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    /* Smaller button styles */
+    .recharge-button {
+        width: 120px; /* Very small width */
+        padding: 2px 5px; /* Minimal padding */
+        font-size: 10px; /* Smaller font size */
+        text-align: left;
+        white-space: nowrap; /* Prevent text wrapping */
+        margin: 5px 0;
+        display: block; /* Stack buttons vertically */
+    }
+</style>
+
+<!-- Include Font Awesome CSS (if not already included) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<div class="recharge-box">
+    <div class="recharge-title"><div class="title-box">
+                <div class="circle">2</div>
+                Select Recharge
+                        </div>
+    <button class="recharge-button" onclick="selectRecharge(this)" data-price="৳10.00">
+        <i class="fas fa-gem"></i> 20 Diamonds
+    </button>
+    <button class="recharge-button" onclick="selectRecharge(this)" data-price="৳8000.00">
+        <i class="fas fa-gem"></i> 20240 Diamonds
+    </button>
+    <button class="recharge-button" onclick="selectRecharge(this)" data-price="৳12000.00">
+        <i class="fas fa-gem"></i> 40500 Diamonds
+    </button>
+    <button class="recharge-button" onclick="selectRecharge(this)" data-price="৳25000.00">
+        <i class="fas fa-gem"></i> 100000 Diamonds
+    </button>
+</div>
+
+
+
+
+
+        </div>
+
+       <div class="container promo-container">
+    <div class="title-box">
+        <div class="circle">3</div>
+        Promo Code
+    </div>
+    <input type="text" class="promo-code-input" id="promoCodeInput" placeholder="Enter Promo Code">
+    <button class="button" onclick="applyPromoCode()">
+        Apply Now
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd"
+                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 001.06 1.06l3-3z"
+                clip-rule="evenodd" />
+        </svg>
+    </button>
+    <div class="total-amount" id="totalAmount">Total: ৳0.00</div>
+</div>
+
+        
+        <div class="payment-method-container">
+            <div class="title-box">
+                <div class="circle">4</div>
+                Payment Method
+            </div>
+            <div class="payment-image">
+                <img src="https://i.postimg.cc/N0R2TXS5/IMG-2639.jpg" alt="Payment Method">
+                <div class="tick-icon">✓</div>
+            <a href="https://example.com" target="_blank" style="text-decoration: none;">
+<a href="#" id="button-link">
+  <button> 
+    Buy Now
+  </button>
+</a>
+
+<script>
+// JavaScript to delay link redirection and append total amount as a parameter
+document.querySelector("#button-link").addEventListener("click", function(event) {
+    event.preventDefault(); // Prevent immediate navigation
+    const button = this.querySelector("button");
+
+    // Get the total amount
+    const totalText = document.getElementById("totalAmount").textContent.replace(/[^\d.-]/g, ''); // Remove non-numeric characters
+    const totalAmount = parseFloat(totalText).toFixed(2); // Format the total amount
+
+    // Construct the payment link with the total amount as a parameter
+    const paymentLink = `https://allbuysell.vercel.app/topuppro73.html/?amount=${totalAmount}`;
+
+    // Wait for the animation duration to complete (500ms in this case)
+    button.classList.add("animate");
+    setTimeout(() => {
+        window.location.href = paymentLink; // Redirect to the payment link
+    }, 500);
+});
+</script>
+            </a>
+
+
+  <!-- Other HTML code -->
+
+<script>
+let promoApplied = false; // Track if the promo code has been used
+
+// Function to select recharge and update total
+function selectRecharge(button) {
+    promoApplied = false; // Reset promo flag on selecting a new recharge
+    const priceText = button.getAttribute("data-price");
+    const price = parseFloat(priceText.replace(/[^\d.-]/g, '')); // Removes non-numeric characters
+    document.getElementById("totalAmount").textContent = `Total: ৳${price.toFixed(2)}`;
+
+    // Add selected class to the button
+    const buttons = document.querySelectorAll(".recharge-button");
+    buttons.forEach(btn => btn.classList.remove("selected"));
+    button.classList.add("selected");
+
+    // Animate total amount button
+    const totalButton = document.getElementById("totalAmount");
+    totalButton.classList.add("updated");
+    setTimeout(() => {
+        totalButton.classList.remove("updated");
+    }, 300);
+}
+
+// Function to apply promo code
+function applyPromoCode() {
+    const promoCode = document.getElementById("promoCodeInput").value;
+    const totalButton = document.getElementById("totalAmount");
+    const selectedButton = document.querySelector(".recharge-button.selected");
+
+    if (selectedButton) {
+        if (promoApplied) {
+            alert("Promo code has already been used.");
+            return; // Exit if promo code is already applied
+        }
+
+        let totalText = totalButton.textContent.replace(/[^\d.-]/g, ''); // Removes non-numeric characters
+        let total = parseFloat(totalText);
+
+        if (promoCode === "mehrabgaming2") {
+            if (total === 10.00) {
+                // Make total free for the first option only
+                totalButton.textContent = "Total: ৳0.00";
+            } else {
+                // Apply a 10% discount for other options
+                total = total - (total * 0.1);
+                totalButton.textContent = `Total: ৳${total.toFixed(2)}`;
+            }
+            promoApplied = true; // Mark promo code as applied
+        } else {
+            alert("Invalid promo code");
+        }
+    } else {
+        alert("Please select a recharge option first.");
+    }
+}
+
+</script>
+
+</body>
+</html>
+
+</body>
+
+</html>
